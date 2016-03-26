@@ -7,4 +7,13 @@
     <groupId>ru.tecom.petyankin</groupId>
     <artifactId>mibbrowser</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+
+            <dependencies>
+                <dependency>
+                    <groupId>org.snmp4j</groupId>
+                    <artifactId>snmp4j</artifactId>
+                    <version>1.10.1</version>
+                </dependency>
+            </dependencies>
 </project>
