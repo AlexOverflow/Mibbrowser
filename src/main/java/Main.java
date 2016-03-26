@@ -1,6 +1,6 @@
 
 import org.snmp4j.smi.OID;
-import server.SnmpClient;
+import model.SnmpClient;
 
 import java.util.Scanner;
 
