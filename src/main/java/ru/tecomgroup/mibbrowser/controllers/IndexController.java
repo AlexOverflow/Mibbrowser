@@ -1,4 +1,4 @@
-package ru.tecomgroup.controllers;
+package ru.tecomgroup.mibbrowser.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;

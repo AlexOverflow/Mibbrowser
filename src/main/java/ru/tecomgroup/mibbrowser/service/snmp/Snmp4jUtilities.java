@@ -1,48 +1,44 @@
-package model;
+package ru.tecomgroup.mibbrowser.service.snmp;
 
 import org.snmp4j.*;
 import org.snmp4j.CommunityTarget;import org.snmp4j.PDU;import org.snmp4j.Snmp;import org.snmp4j.Target;import org.snmp4j.TransportMapping;import org.snmp4j.event.ResponseEvent;
 import org.snmp4j.mp.SnmpConstants;
 import org.snmp4j.smi.*;
 import org.snmp4j.smi.Address;import org.snmp4j.smi.GenericAddress;import org.snmp4j.smi.OID;import org.snmp4j.smi.OctetString;import org.snmp4j.smi.VariableBinding;import org.snmp4j.transport.DefaultUdpTransportMapping;
+import ru.tecomgroup.mibbrowser.service.snmp.configuration.Snmp4jConfiguration;
+
 import java.io.IOException;import java.lang.String;
 
 
 
-public class SnmpClient {
+public class Snmp4jUtilities {
     private Snmp snmp;
     private TransportMapping transport;
     private Address address;
 
-   public  void start(String address) {
-        this.address = GenericAddress.parse(address);
-        try {
-            transport = new DefaultUdpTransportMapping();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        snmp = new Snmp(transport);
+    private static Snmp connect(Snmp4jConfiguration config){
+        Address address = config.getAddress();
+        TransportMapping transportMapping = config.getTransportMapping();
+        Snmp snmp = new Snmp(transportMapping);
         try {
             snmp.listen();
-        } catch (IOException e) {
+        } catch (IOException e){
             e.printStackTrace();
         }
+        return snmp;
     }
 
-   public ResponseEvent get(OID oid){
+
+
+   public static ResponseEvent get(OID oid, Snmp4jConfiguration config){
         PDU pdu = new PDU();
             pdu.add(new VariableBinding(oid));
         pdu.setType(PDU.GET);
-       ResponseEvent event = null;
-        try {
-            event =  snmp.send(pdu, getTarget(), transport);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+       ResponseEvent event = getSnmpResponseEvent(pdu, config);
         return event;
     }
 
-   public ResponseEvent get(OID[] oids) {
+  /* public static ResponseEvent get(OID[] oids) {
        PDU pdu = new PDU();
        ResponseEvent event = null;
         for(OID oid : oids){
@@ -54,18 +50,13 @@ public class SnmpClient {
             }
         }
        return event;
-    }
+    }*/
 
-    public  ResponseEvent getNext(OID oid){
+    public static ResponseEvent getNext(OID oid, Snmp4jConfiguration config){
         PDU pdu = new PDU();
         pdu.add(new VariableBinding(oid));
         pdu.setType(PDU.GETNEXT);
-        ResponseEvent event = null;
-        try {
-            event =  snmp.send(pdu, getTarget(), transport);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        ResponseEvent event = getSnmpResponseEvent(pdu, config);
         return event;
     }
 
@@ -81,14 +72,16 @@ public class SnmpClient {
         return target;
     }
 
-    public String getAsString(OID oid){
-        ResponseEvent event = get(oid);
-       return event.getResponse().get(0).toString();
-    }
-
-    public String getNextAsString(OID oid){
-        ResponseEvent event = getNext(oid);
-        return oid + event.getResponse().get(0).toString();
+    private static ResponseEvent getSnmpResponseEvent(PDU pdu, Snmp4jConfiguration config) {
+        ResponseEvent event = null;
+        try {
+            Snmp snmp = connect(config);
+             event = snmp.send(pdu, config.getTarget());
+            snmp.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return  event;
     }
 
 }

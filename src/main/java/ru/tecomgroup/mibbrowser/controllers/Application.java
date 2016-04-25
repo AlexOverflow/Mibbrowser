@@ -1,4 +1,4 @@
-package ru.tecomgroup.controllers;
+package ru.tecomgroup.mibbrowser.controllers;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
