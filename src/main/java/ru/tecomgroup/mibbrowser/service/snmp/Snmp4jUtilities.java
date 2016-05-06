@@ -38,38 +38,12 @@ public class Snmp4jUtilities {
         return event;
     }
 
-  /* public static ResponseEvent get(OID[] oids) {
-       PDU pdu = new PDU();
-       ResponseEvent event = null;
-        for(OID oid : oids){
-          pdu.add(new VariableBinding(oid));
-            try {
-                event =  snmp.send(pdu, getTarget());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-       return event;
-    }*/
-
     public static ResponseEvent getNext(OID oid, Snmp4jConfiguration config){
         PDU pdu = new PDU();
         pdu.add(new VariableBinding(oid));
         pdu.setType(PDU.GETNEXT);
         ResponseEvent event = getSnmpResponseEvent(pdu, config);
         return event;
-    }
-
-
-
-    private Target getTarget(){
-        CommunityTarget target = new CommunityTarget();
-        target.setCommunity(new OctetString("public"));
-        target.setAddress(address);
-        target.setRetries(2);
-        target.setTimeout(1500);
-        target.setVersion(SnmpConstants.version2c);
-        return target;
     }
 
     private static ResponseEvent getSnmpResponseEvent(PDU pdu, Snmp4jConfiguration config) {

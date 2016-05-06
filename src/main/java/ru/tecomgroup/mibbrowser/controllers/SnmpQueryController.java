@@ -1,10 +1,10 @@
 package ru.tecomgroup.mibbrowser.controllers;
 
 import org.springframework.web.bind.annotation.*;
-import ru.tecomgroup.mibbrowser.model.OidDataBinding;
+import ru.tecomgroup.mibbrowser.model.ResponseSnmpObject;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import ru.tecomgroup.mibbrowser.service.snmp.SnmpDataBindingsService;
+import ru.tecomgroup.mibbrowser.service.snmp.SnmpDataTransferService;
 import ru.tecomgroup.mibbrowser.service.snmp.SnmpServiceFactory;
 
 
@@ -13,26 +13,27 @@ import java.util.List;
 @RequestMapping(value = "/mibbrowser")
 public class SnmpQueryController {
 
-    private SnmpDataBindingsService dataBindingsService = SnmpServiceFactory.getSnmpService("testService");
+    private SnmpDataTransferService dataBindingsService =
+            SnmpServiceFactory.getSnmpService(SnmpServiceFactory.TEST_SERVICE);
 
     @RequestMapping(value = "/get", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-        public OidDataBinding snmpGet
+        public ResponseSnmpObject snmpGet
             (@RequestParam(value = "oid") String oid, @RequestParam(value = "address") String address){
-            return dataBindingsService.snmpGet(oid, address);
+            return dataBindingsService.get(oid);
         }
 
     @RequestMapping(value = "/next", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-        public OidDataBinding snmpNext
+        public ResponseSnmpObject snmpNext
             (@RequestParam(value = "oid") String oid, @RequestParam(value = "address") String address ){
-            return dataBindingsService.snmpGetNext(oid, address);
+            return dataBindingsService.getNext(oid);
         }
 
     @RequestMapping(value = "/walk", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<OidDataBinding> snmpWalk
+    public List<ResponseSnmpObject> snmpWalk
             (@RequestParam(value = "oid") String oid, @RequestParam(value = "address") String address){
-        return dataBindingsService.snmpWalk(oid, address);
+        return dataBindingsService.walk(oid);
     }
 }
