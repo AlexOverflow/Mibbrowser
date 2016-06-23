@@ -1,49 +1,27 @@
 package ru.tecomgroup.mibbrowser.snmp.model;
+import java.util.List;
 
 public class SnmpResponse {
-    private String oid;
-    private String oidValue;
-    private String time;
+    private List<SnmpVariable> variableList;
 
-     public SnmpResponse(String oid, String oidValue, String time) {
-        this.oid = oid;
-        this.oidValue = oidValue;
-        this.time = time;
-    }
-    public SnmpResponse(){
-
+    public SnmpResponse(List<SnmpVariable> variableList) {
+        this.variableList = variableList;
     }
 
-    public String getTime() {
-        return time;
+    public void setVariableList(List<SnmpVariable> variableList) {
+        this.variableList = variableList;
     }
 
-    public void setTime(String time) {
-        this.time = time;
-    }
-
-    public String getOid() {
-        return oid;
-    }
-
-    public void setOid(String oid) {
-        this.oid = oid;
-    }
-
-    public String getOidValue() {
-        return oidValue;
-    }
-
-    public void setOidValue(String oidValue) {
-        this.oidValue = oidValue;
+    public List<SnmpVariable> getVariableList() {
+        return variableList;
     }
 
     @Override
     public String toString() {
-        return "SnmpResponse{" +
-                "oid='" + oid + '\'' +
-                ", oidValue='" + oidValue + '\'' +
-                ", time='" + time + '\'' +
-                '}';
+       StringBuilder builder = new StringBuilder();
+        for(SnmpVariable v : variableList){
+            builder.append(v.toString() + "\n");
+        }
+        return builder.toString();
     }
 }
