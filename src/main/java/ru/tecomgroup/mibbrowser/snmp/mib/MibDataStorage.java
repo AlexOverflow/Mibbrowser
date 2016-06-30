@@ -1,6 +1,4 @@
 package ru.tecomgroup.mibbrowser.snmp.mib;
-
-
 import net.percederberg.mibble.*;
 
 import java.io.File;

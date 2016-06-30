@@ -9,17 +9,13 @@ import java.time.format.FormatStyle;
 import java.util.List;
 
 
-public class MibbrowserResponse extends SnmpResponse {
+public class MibbrowserResponse {
 
-    String time;
+    private SnmpResponse response;
+    private String time;
 
-    public MibbrowserResponse(List<SnmpVariable> variableList) {
-        super(variableList);
-        setCurrentTime();
-    }
-
-    public MibbrowserResponse(SnmpResponse response){
-        super(response.getVariableList());
+    public MibbrowserResponse(SnmpResponse response) {
+        this.response = response;
         setCurrentTime();
     }
 
@@ -35,5 +31,13 @@ public class MibbrowserResponse extends SnmpResponse {
 
     public void setTime(String time) {
         this.time = time;
+    }
+
+    public SnmpResponse getResponse() {
+        return response;
+    }
+
+    public void setResponse(SnmpResponse response) {
+        this.response = response;
     }
 }

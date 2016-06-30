@@ -10,7 +10,7 @@
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<context:component-scan base-package="ru.tecomgroup.mibbrowser.controllers" />
+	<context:component-scan base-package="ru.tecomgroup.mibbrowser.spring.controllers" />
 
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -21,6 +21,15 @@
 			<value>.jsp</value>
 		</property>
 	</bean>
+
+
+	<bean id="DataBindingsService" class="ru.tecomgroup.mibbrowser.spring.service.MibbrowserDataBindingsService">
+	</bean>
+
+
+
+
+
 
 	<mvc:resources mapping="/resources/**" location="/resources/" />
 	<mvc:annotation-driven />

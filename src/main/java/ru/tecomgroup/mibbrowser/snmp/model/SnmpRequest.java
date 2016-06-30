@@ -10,6 +10,8 @@ public class SnmpRequest {
         this.oid = oid;
     }
 
+    public SnmpRequest(){}
+
     public String getAddress() {
         return address;
     }
