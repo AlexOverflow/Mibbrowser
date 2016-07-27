@@ -1,13 +1,15 @@
 package ru.tecomgroup.mibbrowser.core.mib.mibble;
 
+import com.google.common.collect.LinkedListMultimap;
+import com.google.common.collect.Multimap;
 import net.percederberg.mibble.Mib;
 import net.percederberg.mibble.MibValueSymbol;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.multipart.MultipartFile;
 import ru.tecomgroup.mibbrowser.core.mib.MibManager;
 
 import java.io.*;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -19,13 +21,13 @@ public class MibbleMibManager implements MibManager {
     private MibbleMibLoader mibLoader;
 
     private Mib[] mibs;
-    private final File MIBS_PATH_NAME = new File(this.getClass().getClassLoader().getResource("mibs").getFile());
+    private final File MIBS_DIRECTORY = new File(getClass().getClassLoader().getResource("mibs").getFile());
 
 
     public MibbleMibManager() {
         try {
             mibLoader = new MibbleMibLoader();
-            mibLoader.setMibDirectory(MIBS_PATH_NAME);
+            mibLoader.setMibDirectory(MIBS_DIRECTORY);
             mibs = mibLoader.loadMib();
         }catch (NullPointerException e){
             e.printStackTrace();
@@ -38,26 +40,26 @@ public class MibbleMibManager implements MibManager {
     }
 
     @Override
-    public void unloadMib(String mibName) {
-        for (Mib mib : mibs) {
-            if (mibName.equals(mib.getName()))
-                mib.getFile().delete();
-        }
+    public void deleteMib(String mibFileName) {
+       for(Mib mib : mibs){
+           if(mibFileName.equals(mib.getFile().getName()))
+               mib.getFile().delete();
+       }
         reLoadMib();
     }
 
     @Override
     public List<String> getMibList() {
-        List<String> mibNameList = new LinkedList<>();
-        for (Mib mib : mibs) {
-            mibNameList.add(mib.getName());
+        List<String> mibList = new LinkedList<>();
+        for(Mib mib : mibs) {
+           mibList.add(mib.getFile().getName());
         }
-        return mibNameList;
+        return null;
     }
 
     @Override
     public void saveMib(MultipartFile file) {
-        File mibFile = new File(MIBS_PATH_NAME + File.separator + file.getOriginalFilename());
+        File mibFile = new File(MIBS_DIRECTORY + File.separator + file.getOriginalFilename());
         try {
             mibFile.createNewFile();
         } catch (IOException e) {
@@ -70,6 +72,8 @@ public class MibbleMibManager implements MibManager {
         }
         reLoadMib();
     }
+
+
 
     @Override
     public String findMibValueByOId(String oid) {

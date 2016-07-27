@@ -9,14 +9,17 @@
 </head>
 <body>
 
-<c:forEach var="mib" items="${mibList}">
-    ${mib}
+<c:forEach var="mibFile" items="${mibMultiMap.keySet()}">
+    ${mibFile}
+    <c:forEach var="mibName" items="${mibMultiMap.get(mibFile)}">
+      ${mibName}
+    </c:forEach>
 </c:forEach>
 
-
+<spring:url value="mibbrowser/mib/add" var="addMibUrl" />
 
 <form:form method="post"
-           commandName="uploadForm" enctype="multipart/form-data">
+           commandName="uploadForm" action="${addMibUrl}" enctype="multipart/form-data">
 
     <p>Select files to upload. Press Add button to add more file inputs.</p>
 
