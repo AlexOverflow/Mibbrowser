@@ -5,6 +5,8 @@ import net.percederberg.mibble.Mib;
 import net.percederberg.mibble.MibLoader;
 import net.percederberg.mibble.MibLoaderException;
 import org.apache.log4j.Logger;
+import org.springframework.core.io.Resource;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -18,8 +20,8 @@ public class MibbleMibLoader {
     private File mibDirectory;
 
 
-    void setMibDirectory(File fileDir){
-      this.mibDirectory = fileDir;
+    void setMibDirectory(String res) throws IOException {
+            this.mibDirectory = new File(res);
     }
 
     Mib[] loadMib(){

@@ -9,11 +9,8 @@
 </head>
 <body>
 
-<c:forEach var="mibFile" items="${mibMultiMap.keySet()}">
-    ${mibFile}
-    <c:forEach var="mibName" items="${mibMultiMap.get(mibFile)}">
-      ${mibName}
-    </c:forEach>
+<c:forEach var="mib" items="${mibList}">
+    ${mib}
 </c:forEach>
 
 <spring:url value="mibbrowser/mib/add" var="addMibUrl" />

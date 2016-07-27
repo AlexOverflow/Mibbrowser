@@ -1,15 +1,15 @@
 package ru.tecomgroup.mibbrowser.core.mib.mibble;
 
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
+
 import net.percederberg.mibble.Mib;
 import net.percederberg.mibble.MibValueSymbol;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 import ru.tecomgroup.mibbrowser.core.mib.MibManager;
 
 import java.io.*;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,10 +21,12 @@ public class MibbleMibManager implements MibManager {
     private MibbleMibLoader mibLoader;
 
     private Mib[] mibs;
-    private final File MIBS_DIRECTORY = new File(getClass().getClassLoader().getResource("mibs").getFile());
 
 
-    public MibbleMibManager() {
+    private  String MIBS_DIRECTORY = getClass().getClassLoader().getResource("mibs").getFile();
+
+
+    public MibbleMibManager() throws IOException {
         try {
             mibLoader = new MibbleMibLoader();
             mibLoader.setMibDirectory(MIBS_DIRECTORY);
@@ -52,9 +54,10 @@ public class MibbleMibManager implements MibManager {
     public List<String> getMibList() {
         List<String> mibList = new LinkedList<>();
         for(Mib mib : mibs) {
-           mibList.add(mib.getFile().getName());
+            if(mib.getFile().exists())
+                mibList.add(mib.getFile().getName());
         }
-        return null;
+        return mibList;
     }
 
     @Override
