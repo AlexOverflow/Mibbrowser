@@ -5,28 +5,52 @@
 
 <html>
 <head>
-    <title></title>
+    <title>Mibbrowser</title>
+
+    <link rel="stylesheet" href="<c:url value="/resources/css/bootstrap.min.css"/>" type="text/css" media="all">
+    <link rel="stylesheet" href="<c:url value="/resources/css/navbar.css"/>" type="text/css" media="all">
+    <link rel="stylesheet" href="<c:url value="/resources/css/normalize.css"/>" type="text/css" media="all">
+
+    <script src="<c:url value="/resources/js/jquery.min.js"/>"></script>
+    <script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
+    <script src="<c:url value="/resources/js/bootstrap-filestyle.min.js"/>"></script>
+
+
 </head>
 <body>
 
-<c:forEach var="mib" items="${mibList}">
-    ${mib}
-</c:forEach>
+<spring:url value="mibbrowser/browser" var="browserUrl"/>
+<spring:url value="mibbrowser/mib" var="mibUrl"/>
+<spring:url value="mibbrowser/config" var="configUrl"/>
 
-<spring:url value="mibbrowser/mib/add" var="addMibUrl" />
 
-<form:form method="post"
-           commandName="uploadForm" action="${addMibUrl}" enctype="multipart/form-data">
+<div class="container">
 
-    <p>Select files to upload. Press Add button to add more file inputs.</p>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">MibBrowser</a>
+            </div>
+            <div id="navbar" class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li><a href="http://bootstrap.imazin.ru/examples/navbar/#">Browser</a></li>
+                    <li><a href="http://bootstrap.imazin.ru/examples/navbar/#">Configuration</a></li>
+                    <li  class="active"><a href="http://bootstrap.imazin.ru/examples/navbar/#">Mib</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    <input id="addFile" type="button" value="Add File" />
-    <table id="fileTable">
-        <tr>
-            <td><input type="file" name="file" /></td>
-        </tr>
-    </table>
-    <br/><input type="submit" value="Upload" />
-</form:form>
+    <div class="jumbotron">
+        <form role="form">
+            <div class="form-group" style="width: 200px;">
+                <input type="file" class="filestyle" data-icon="false" data-size="sm"><br>
+                <input type="file" class="filestyle" data-icon="false" data-size="sm">
+            </div>
+        </form>
+
+    </div>
+</div>
+
 </body>
 </html>
