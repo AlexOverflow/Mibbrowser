@@ -4,8 +4,6 @@ package ru.tecomgroup.mibbrowser.core.mib.mibble;
 import net.percederberg.mibble.Mib;
 import net.percederberg.mibble.MibValueSymbol;
 import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 import ru.tecomgroup.mibbrowser.core.mib.MibManager;
 
