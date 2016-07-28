@@ -5,21 +5,17 @@ import org.snmp4j.PDU;
 import org.snmp4j.Snmp;
 import org.snmp4j.event.ResponseEvent;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
-import ru.tecomgroup.mibbrowser.core.model.MibBrowserRequest;
-import ru.tecomgroup.mibbrowser.core.model.SnmpCofiguration;
-import ru.tecomgroup.mibbrowser.core.model.SnmpResponse;
+import ru.tecomgroup.mibbrowser.core.model.*;
 import ru.tecomgroup.mibbrowser.core.snmp.SnmpMessageBroker;
 
 import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
 
 
 public class Snmp4jMessageBroker implements SnmpMessageBroker {
 
-    Snmp4jToResponseConverter responseConverter;
-    RequestToSnmp4jConverter requestConverter;
-
     @Override
-
     public SnmpResponse sendQuery(MibBrowserRequest request, SnmpCofiguration config){
         SnmpResponse resp = null;
         switch (request.getCommand()){
@@ -38,12 +34,27 @@ public class Snmp4jMessageBroker implements SnmpMessageBroker {
 
     private SnmpResponse sendSingleQuery(MibBrowserRequest request, SnmpCofiguration config) {
         OidValueReader reader = new OidValueReader();
-        return reader.readOidValue(request, config);
+        SnmpResponse resp =  reader.readOidValue(request, config);
+        reader.close();
+        return resp;
     }
 
 
     private SnmpResponse makeSnmpWalkQuery(MibBrowserRequest request, SnmpCofiguration config) {
-         return null;
+        List<SnmpVariable> snmpVariableList = new LinkedList<>();
+        OidValueReader reader = new OidValueReader();
+        request.setCommand(SnmpCommand.SNMP_GET);
+        snmpVariableList.add(reader.readOidValue(request, config).getSnmpVariableList().get(0));
+        request.setCommand(SnmpCommand.SNMP_GET_NEXT);
+        SnmpVariable variable;
+        while((variable = reader.readOidValue(request, config).getSnmpVariableList().get(0)) != null){
+            snmpVariableList.add(variable);
+            request.setOid(variable.getOid());
+        }
+        reader.close();
+        SnmpResponse resp = new SnmpResponse();
+        resp.setSnmpVariableList(snmpVariableList);
+        return resp;
     }
 
 

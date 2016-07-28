@@ -19,9 +19,12 @@
 </head>
 <body>
 
-<spring:url value="mibbrowser/browser" var="browserUrl"/>
-<spring:url value="mibbrowser/mib" var="mibUrl"/>
-<spring:url value="mibbrowser/config" var="configUrl"/>
+<spring:url value="/mibbrowser/browser" var="browserUrl"/>
+<spring:url value="/mibbrowser/mib" var="mibUrl"/>
+<spring:url value="/mibbrowser/config" var="configUrl"/>
+
+<spring:url value="/mibbrowser/mib/add" var="uploadMib"/>
+<spring:url value="/mibbrowser/mib/delete" var="deleteMib"/>
 
 
 <div class="container">
@@ -33,22 +36,26 @@
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="http://bootstrap.imazin.ru/examples/navbar/#">Browser</a></li>
-                    <li><a href="http://bootstrap.imazin.ru/examples/navbar/#">Configuration</a></li>
-                    <li  class="active"><a href="http://bootstrap.imazin.ru/examples/navbar/#">Mib</a></li>
+                    <li><a href="${mibUrl}">Browser</a></li>
+                    <li><a href="${configUrl}">Configuration</a></li>
+                    <li  class="active"><a href="${mibUrl}">Mib</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
     <div class="jumbotron">
-        <form role="form">
+        <form:form role="form" commandName="uploadForm" method="post" action="${uploadMib}" enctype="multipart/form-data" >
             <div class="form-group" style="width: 200px;">
-                <input type="file" class="filestyle" data-icon="false" data-size="sm"><br>
-                <input type="file" class="filestyle" data-icon="false" data-size="sm">
+                Upload mib file: <br>
+                <input type="file" name="file" class="filestyle" data-icon="false" data-size="sm"><br>
+                <button type="submit" class="btn btn-success">Upload</button>
             </div>
-        </form>
+        </form:form>
 
+        <c:forEach var="mib" items="${mibList}">
+            ${mib} <a href="${deleteMib}/${mib}">delete</a>
+            </c:forEach>
     </div>
 </div>
 

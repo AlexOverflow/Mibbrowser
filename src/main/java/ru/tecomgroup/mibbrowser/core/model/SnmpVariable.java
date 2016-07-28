@@ -10,6 +10,10 @@ public class SnmpVariable {
         this.oidValue = oidValue;
     }
 
+
+
+    public SnmpVariable(){}
+
     public String getOid() {
         return oid;
     }

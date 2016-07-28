@@ -23,9 +23,8 @@ public class OidValueReader{
         PDU pdu = requestConverter.convertToPDU(request, config);
         CommunityTarget target = requestConverter.convertToTarget(request, config);
         ResponseEvent event = sendPDU(pdu, target);
-        SnmpResponse snmpResponse = Snmp4jToResponseConverter.toSnmpResponseConvert(event);
+        SnmpResponse snmpResponse = responseConverter.toSnmpResponseConvert(event);
         return snmpResponse;
-
     }
 
     private Snmp snmpUdpProtocolInitialize() {
@@ -49,5 +48,13 @@ public class OidValueReader{
             }
         }
         return event;
+    }
+
+    public void close(){
+        try {
+            snmp.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

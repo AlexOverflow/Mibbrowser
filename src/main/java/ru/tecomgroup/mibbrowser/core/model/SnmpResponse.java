@@ -10,6 +10,8 @@ public class SnmpResponse {
         this.snmpVariableList = snmpVariableList;
     }
 
+    public SnmpResponse(){}
+
     public List<SnmpVariable> getSnmpVariableList() {
         return snmpVariableList;
     }
