@@ -1,17 +1,29 @@
 package ru.tecomgroup.mibbrowser.spring.service;
 
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import ru.tecomgroup.mibbrowser.core.mib.MibManager;
 import ru.tecomgroup.mibbrowser.core.model.*;
 import ru.tecomgroup.mibbrowser.core.snmp.SnmpMessageBroker;
-
 import java.util.LinkedList;
 import java.util.List;
 
 public class DataBindingsService {
-    SnmpMessageBroker snmp;
-    MibManager mibManager;
-    TimeService timeService;
+
+
+    @Autowired
+    @Qualifier( "snmp4jMenegerBroker")
+    private SnmpMessageBroker snmp;
+
+    @Autowired
+    @Qualifier( "mibbleMibManger")
+    private MibManager mibManager;
+
+    @Autowired
+    @Qualifier( "timeService")
+    private TimeService timeService;
+
 
     public MibBrowserResponse doRequest(MibBrowserRequest request, SnmpConfiguration config) {
         SnmpResponse snmpResp = snmp.sendQuery(request, config);

@@ -1,6 +1,5 @@
 package ru.tecomgroup.mibbrowser.spring.controllers;
 
-import com.google.common.collect.Multimap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import ru.tecomgroup.mibbrowser.core.mib.MibManager;
-import ru.tecomgroup.mibbrowser.spring.Model.FileUpload;
+import ru.tecomgroup.mibbrowser.spring.model.FileUpload;
 
 
 import java.io.IOException;

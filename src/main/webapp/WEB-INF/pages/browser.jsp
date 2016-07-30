@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="input" uri="http://www.springframework.org/tags/form" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <html>
@@ -45,32 +46,62 @@
 	</nav>
 
 	<div class="jumbotron">
-		<form role="form">
+		<form:form  role="form" method="post" modelAttribute="request" >
 			<div class="form-group">
-				<label for="address">ADDRESS</label>
-				<form:input id="address" path="hostAddress" class="form-control" />
-				</div>>
+				HOST ADDRESS:
+				<form:input  path="hostAddress" type="text" class="form-control" />
+				</div>
 			<div class="form-group">
-				<label for="oid">OID</label>
-				<form:input id="oid" path="oid" class="form-control" />
+				OID:
+				<input:input  path="oid" type="text" class="form-control" />
 			</div>
 
 			<div class="form-group">
 			<form:select path="command" class="form-control input-lg">
-				<form:option selected="selected" value="get">GET</form:option>
-				<form:option value="next">GET_NEXT</form:option>
-				<form:option value="walk">WALK</form:option>
+				<form:option selected="selected" value="SNMP_GET">GET</form:option>
+				<form:option value="SNMP_GET_NEXT">GETNEXT</form:option>
+				<form:option value="SNMP_WALK">WALK</form:option>
 			</form:select>
 			</div>
 
 			<div class="form-group">
 				<input type="submit" class="btn btn-info" value="Send" />
 			</div>
-		</form>
+		</form:form>
 
-		<c:forEach var="mib" items="${mibList}">
-			${mib} <a href="${deleteMib}/${mib}">delete</a>
-		</c:forEach>
+		<div class="table-responsive">
+			<table class="table table-striped">
+				<thead>
+				<tr>
+					<th>Время года</th>
+					<th>Дождь</th>
+					<th>Снег</th>
+				</tr>
+				</thead>
+				<tbody>
+				<tr>
+					<td>Зима</td>
+					<td>нет</td>
+					<td>есть</td>
+				</tr>
+				<tr>
+					<td>Весна</td>
+					<td>есть</td>
+					<td>есть</td>
+				</tr>
+				<tr>
+					<td>Лето</td>
+					<td>есть</td>
+					<td>нет</td>
+				</tr>
+				<tr>
+					<td>Осень</td>
+					<td>есть</td>
+					<td>есть</td>
+				</tr>
+				</tbody>
+			</table>
+		</div>
 	</div>
 </div>
 
