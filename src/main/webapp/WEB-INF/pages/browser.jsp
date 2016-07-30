@@ -45,13 +45,28 @@
 	</nav>
 
 	<div class="jumbotron">
-		<form:form role="form" commandName="" method="post" action="${uploadMib}" >
-			<div class="form-group" style="width: 200px;">
-				Upload mib file: <br>
-				<input type="file" name="file" class="filestyle" data-icon="false" data-size="sm"><br>
-				<button type="submit" class="btn btn-success">Upload</button>
+		<form role="form">
+			<div class="form-group">
+				<label for="address">ADDRESS</label>
+				<form:input id="address" path="hostAddress" class="form-control" />
+				</div>>
+			<div class="form-group">
+				<label for="oid">OID</label>
+				<form:input id="oid" path="oid" class="form-control" />
 			</div>
-		</form:form>
+
+			<div class="form-group">
+			<form:select path="command" class="form-control input-lg">
+				<form:option selected="selected" value="get">GET</form:option>
+				<form:option value="next">GET_NEXT</form:option>
+				<form:option value="walk">WALK</form:option>
+			</form:select>
+			</div>
+
+			<div class="form-group">
+				<input type="submit" class="btn btn-info" value="Send" />
+			</div>
+		</form>
 
 		<c:forEach var="mib" items="${mibList}">
 			${mib} <a href="${deleteMib}/${mib}">delete</a>

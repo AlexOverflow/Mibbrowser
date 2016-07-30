@@ -9,32 +9,28 @@ import org.snmp4j.smi.OID;
 import org.snmp4j.smi.OctetString;
 import org.snmp4j.smi.VariableBinding;
 import ru.tecomgroup.mibbrowser.core.model.MibBrowserRequest;
-import ru.tecomgroup.mibbrowser.core.model.SnmpCofiguration;
+import ru.tecomgroup.mibbrowser.core.model.SnmpConfiguration;
 
 public class RequestToSnmp4jConverter {
 
-    public CommunityTarget convertToTarget(MibBrowserRequest request, SnmpCofiguration config) {
+    public CommunityTarget convertToTarget(MibBrowserRequest request, SnmpConfiguration config) {
         CommunityTarget target = new CommunityTarget();
         target.setCommunity(new OctetString("public"));
-        target.setRetries(config.getRetries());
-        target.setTimeout(config.getTimeOut());
-        target.setAddress(GenericAddress.parse(request.getHostAddress()));
+        target.setRetries(Integer.parseInt(config.getRetries()));
+        target.setTimeout(Integer.parseInt(config.getTimeOut()));
+        target.setAddress(GenericAddress.parse(formatHostAddress(request, config)));
         target.setVersion(SnmpConstants.version2c);
         return target;
     }
 
 
-    public PDU convertToPDU(MibBrowserRequest request, SnmpCofiguration config) {
+    public PDU convertToPDU(MibBrowserRequest request, SnmpConfiguration config) {
         PDU pdu = new PDU();
         pdu.add(new VariableBinding(new OID(request.getOid())));
-        switch (request.getCommand()){
-            case SNMP_GET:
-                pdu.setType(PDU.GET);
-                break;
-            case SNMP_GET_NEXT:
-                pdu.setType(PDU.GETNEXT);
-                break;
-        }
         return pdu;
+    }
+
+    private String formatHostAddress(MibBrowserRequest request, SnmpConfiguration config){
+        return "udp:" + request.getHostAddress() + "/" + config.getPort();
     }
 }

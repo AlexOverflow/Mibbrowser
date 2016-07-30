@@ -1,7 +1,6 @@
 package ru.tecomgroup.mibbrowser.spring.service;
 
 
-import ru.tecomgroup.mibbrowser.core.configuration.ConfigLoader;
 import ru.tecomgroup.mibbrowser.core.mib.MibManager;
 import ru.tecomgroup.mibbrowser.core.model.*;
 import ru.tecomgroup.mibbrowser.core.snmp.SnmpMessageBroker;
@@ -10,14 +9,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DataBindingsService {
-    ConfigLoader configLoader;
     SnmpMessageBroker snmp;
     MibManager mibManager;
     TimeService timeService;
 
-    MibBrowserResponse doRequest(MibBrowserRequest request) {
-
-        SnmpCofiguration config = configLoader.loadConfigForHost(request.getHostAddress());
+    public MibBrowserResponse doRequest(MibBrowserRequest request, SnmpConfiguration config) {
         SnmpResponse snmpResp = snmp.sendQuery(request, config);
         List<MibVariable> mibVariableList = setMibForSnmpResponse(snmpResp);
         MibBrowserResponse browserResponse = new MibBrowserResponse();

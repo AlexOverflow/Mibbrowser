@@ -20,4 +20,12 @@ public class MibBrowserResponse {
     public void setTime(String time) {
         this.time = time;
     }
+
+    @Override
+    public String toString() {
+        return "MibBrowserResponse{" +
+                "mibVariables=" + mibVariables +
+                ", time='" + time + '\'' +
+                '}';
+    }
 }

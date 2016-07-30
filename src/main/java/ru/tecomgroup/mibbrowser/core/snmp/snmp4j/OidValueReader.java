@@ -4,28 +4,48 @@ import org.snmp4j.CommunityTarget;
 import org.snmp4j.PDU;
 import org.snmp4j.Snmp;
 import org.snmp4j.event.ResponseEvent;
+import org.snmp4j.smi.VariableBinding;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
-import ru.tecomgroup.mibbrowser.core.model.MibBrowserRequest;
-import ru.tecomgroup.mibbrowser.core.model.SnmpCofiguration;
-import ru.tecomgroup.mibbrowser.core.model.SnmpResponse;
 import java.io.IOException;
 
 public class OidValueReader{
-    Snmp4jToResponseConverter responseConverter;
-    RequestToSnmp4jConverter requestConverter;
-    Snmp snmp;
 
-    OidValueReader(){
+    private Snmp snmp;
+
+    public OidValueReader(){
         snmpUdpProtocolInitialize();
     }
 
-    SnmpResponse readOidValue(MibBrowserRequest request, SnmpCofiguration config){
-        PDU pdu = requestConverter.convertToPDU(request, config);
-        CommunityTarget target = requestConverter.convertToTarget(request, config);
-        ResponseEvent event = sendPDU(pdu, target);
-        SnmpResponse snmpResponse = responseConverter.toSnmpResponseConvert(event);
-        return snmpResponse;
+
+    VariableBinding snmpGet(PDU pdu, CommunityTarget target){
+        ResponseEvent event = null;
+        try {
+            event = snmp.get(pdu, target);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(event != null) {
+            if ("endOfMibView".equals(event.getResponse().getVariableBindings().get(0).toValueString()))
+                return event.getResponse().getVariableBindings().get(0);
+        }
+
+        return null;
+
     }
+
+    VariableBinding snmpGetNext(PDU pdu, CommunityTarget target){
+        ResponseEvent event = null;
+        try {
+            event = snmp.getNext(pdu, target);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if(event != null) return event.getResponse().getVariableBindings().get(0);
+
+        return null;
+    }
+
+
 
     private Snmp snmpUdpProtocolInitialize() {
         snmp = null;
@@ -38,17 +58,7 @@ public class OidValueReader{
         return snmp;
     }
 
-    ResponseEvent sendPDU(PDU pdu, CommunityTarget target){
-        ResponseEvent event = null;
-        if(snmp != null) {
-            try {
-                event = snmp.send(pdu, target);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return event;
-    }
+
 
     public void close(){
         try {

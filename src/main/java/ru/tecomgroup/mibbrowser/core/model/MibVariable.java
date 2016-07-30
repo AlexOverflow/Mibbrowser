@@ -2,15 +2,18 @@ package ru.tecomgroup.mibbrowser.core.model;
 
 
 public class MibVariable {
-    String oid;
-    String oidValue;
-    String mibName;
+
+    private String oid;
+    private String oidValue;
+    private String mibName;
 
     public MibVariable(String oid, String oidValue, String mibName) {
         this.oid = oid;
         this.oidValue = oidValue;
         this.mibName = mibName;
     }
+
+
 
     public String getOid() {
         return oid;
@@ -34,5 +37,14 @@ public class MibVariable {
 
     public void setMibName(String mibName) {
         this.mibName = mibName;
+    }
+
+    @Override
+    public String toString() {
+        return "MibVariable{" +
+                "oid='" + oid + '\'' +
+                ", oidValue='" + oidValue + '\'' +
+                ", mibName='" + mibName + '\'' +
+                '}';
     }
 }

@@ -2,61 +2,72 @@ package ru.tecomgroup.mibbrowser.core.snmp.snmp4j;
 
 import org.snmp4j.CommunityTarget;
 import org.snmp4j.PDU;
-import org.snmp4j.Snmp;
-import org.snmp4j.event.ResponseEvent;
-import org.snmp4j.transport.DefaultUdpTransportMapping;
+import org.snmp4j.smi.VariableBinding;
 import ru.tecomgroup.mibbrowser.core.model.*;
 import ru.tecomgroup.mibbrowser.core.snmp.SnmpMessageBroker;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 
 public class Snmp4jMessageBroker implements SnmpMessageBroker {
 
+    RequestToSnmp4jConverter converter = new RequestToSnmp4jConverter();
+
     @Override
-    public SnmpResponse sendQuery(MibBrowserRequest request, SnmpCofiguration config){
-        SnmpResponse resp = null;
+    public SnmpResponse sendQuery(MibBrowserRequest request, SnmpConfiguration config){
+        SnmpResponse resp = new SnmpResponse();
+        OidValueReader reader = new OidValueReader();
+        PDU pdu = converter.convertToPDU(request, config);
+        CommunityTarget target = converter.convertToTarget(request, config);
+        VariableBinding variableBinding;
         switch (request.getCommand()){
             case SNMP_GET:
-                resp = sendSingleQuery(request, config);
+                variableBinding = reader.snmpGet(pdu, target);
+                resp = convertVariableBindingToResponse(variableBinding);
                 break;
             case SNMP_GET_NEXT:
-                resp = sendSingleQuery(request, config);
+                variableBinding = reader.snmpGet(pdu, target);
+                resp = convertVariableBindingToResponse(variableBinding);
                 break;
             case SNMP_WALK:
-                resp = makeSnmpWalkQuery(request, config);
+                resp = makeSnmpWalkQuery(pdu, target);
                 break;
         }
-        return resp;
-    }
-
-    private SnmpResponse sendSingleQuery(MibBrowserRequest request, SnmpCofiguration config) {
-        OidValueReader reader = new OidValueReader();
-        SnmpResponse resp =  reader.readOidValue(request, config);
         reader.close();
         return resp;
     }
 
-
-    private SnmpResponse makeSnmpWalkQuery(MibBrowserRequest request, SnmpCofiguration config) {
-        List<SnmpVariable> snmpVariableList = new LinkedList<>();
-        OidValueReader reader = new OidValueReader();
-        request.setCommand(SnmpCommand.SNMP_GET);
-        snmpVariableList.add(reader.readOidValue(request, config).getSnmpVariableList().get(0));
-        request.setCommand(SnmpCommand.SNMP_GET_NEXT);
-        SnmpVariable variable;
-        while((variable = reader.readOidValue(request, config).getSnmpVariableList().get(0)) != null){
-            snmpVariableList.add(variable);
-            request.setOid(variable.getOid());
+    SnmpResponse convertVariableBindingToResponse(VariableBinding variable) {
+        SnmpResponse response = new SnmpResponse();
+        if(variable != null) {
+            List<SnmpVariable> list = new LinkedList<SnmpVariable>();
+            list.add(new SnmpVariable(variable.getOid().toString(), variable.toValueString()));
+            response.setSnmpVariableList(list);
         }
-        reader.close();
-        SnmpResponse resp = new SnmpResponse();
-        resp.setSnmpVariableList(snmpVariableList);
-        return resp;
+        return response;
     }
 
 
+
+
+
+    public SnmpResponse makeSnmpWalkQuery(PDU pdu, CommunityTarget target) {
+        OidValueReader reader = new OidValueReader();
+        SnmpResponse resp = new SnmpResponse();
+        List<SnmpVariable> variableList = new LinkedList<>();
+
+        VariableBinding var =  reader.snmpGet(pdu, target);
+        if(var != null) variableList.add(new SnmpVariable(var.getOid().toString(), var.toValueString()));
+
+        while((var = reader.snmpGetNext(pdu, target)) != null ){
+            variableList.add(new SnmpVariable(var.getOid().toString(), var.toValueString()));
+            pdu.add(new VariableBinding(var.getOid()));
+        }
+
+        resp.setSnmpVariableList(variableList);
+        reader.close();
+        return resp;
+    }
 
 }

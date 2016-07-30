@@ -1,17 +1,19 @@
 package ru.tecomgroup.mibbrowser.core.model;
 
 
-public class SnmpCofiguration {
+public class SnmpConfiguration {
 
     private String retries;
     private String timeOut;
     private String port;
 
-    public SnmpCofiguration(String retries, String timeOut, String port) {
+    public SnmpConfiguration(String retries, String timeOut, String port) {
         this.retries = retries;
         this.timeOut = timeOut;
         this.port = port;
     }
+
+    public SnmpConfiguration(){}
 
     public String getRetries() {
         return retries;

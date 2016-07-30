@@ -19,4 +19,11 @@ public class SnmpResponse {
     public void setSnmpVariableList(List<SnmpVariable> snmpVariableList) {
         this.snmpVariableList = snmpVariableList;
     }
+
+    @Override
+    public String toString() {
+        return "SnmpResponse{" +
+                "snmpVariableList=" + snmpVariableList +
+                '}';
+    }
 }

@@ -2,8 +2,9 @@ package ru.tecomgroup.mibbrowser.core.model;
 
 
 public class SnmpVariable {
-    String oid;
-    String oidValue;
+
+    private String oid;
+    private String oidValue;
 
     public SnmpVariable(String oid, String oidValue) {
         this.oid = oid;
@@ -28,5 +29,13 @@ public class SnmpVariable {
 
     public void setOidValue(String oidValue) {
         this.oidValue = oidValue;
+    }
+
+    @Override
+    public String toString() {
+        return "SnmpVariable{" +
+                "oid='" + oid + '\'' +
+                ", oidValue='" + oidValue + '\'' +
+                '}';
     }
 }
