@@ -1,7 +1,8 @@
 package ru.tecomgroup.mibbrowser.spring.controllers;
 
-import org.snmp4j.Snmp;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -15,19 +16,27 @@ import ru.tecomgroup.mibbrowser.core.model.MibBrowserResponse;
 import ru.tecomgroup.mibbrowser.core.model.SnmpConfiguration;
 import ru.tecomgroup.mibbrowser.spring.service.DataBindingsService;
 
+import java.io.IOException;
+
 @Controller
 @SessionAttributes({"config", "request"})
 @RequestMapping("mibbrowser/browser")
 public class BrowserController {
 
-    @Autowired
-    DataBindingsService dataBindingsService;
-    @Autowired
-    SnmpConfigLoader configLoader;
 
+    @Autowired
+    @Qualifier( "DataBindingService")
+    private DataBindingsService dataBindingsService;
+
+    @Autowired
+    @Qualifier( "configLoader")
+    private SnmpConfigLoader configLoader;
+
+
+    @RequestMapping(method = RequestMethod.GET)
     public String index(Model model){
         model.addAttribute("request", new MibBrowserRequest());
-        return "browser.jsp";
+        return "browser";
     }
 
     @RequestMapping(method = RequestMethod.POST)
@@ -44,6 +53,5 @@ public class BrowserController {
     public SnmpConfiguration getSnmpDefaultConfig(){
         return configLoader.getDefaultSnmpConfig();
     }
-
 
 }

@@ -1,4 +1,4 @@
-package ru.tecomgroup.mibbrowser.spring.Model;
+package ru.tecomgroup.mibbrowser.spring.model;
 
 
 import org.springframework.web.multipart.MultipartFile;

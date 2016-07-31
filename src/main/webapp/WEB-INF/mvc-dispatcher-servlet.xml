@@ -16,6 +16,18 @@
     <bean id="mibbleMibManger"
           class="ru.tecomgroup.mibbrowser.core.mib.mibble.MibbleMibManager"/>
 
+    <bean id="timeService"
+          class="ru.tecomgroup.mibbrowser.spring.service.TimeService"/>
+
+    <bean id="snmp4jMenegerBroker"
+          class="ru.tecomgroup.mibbrowser.core.snmp.snmp4j.Snmp4jMessageBroker"/>
+
+    <bean id="configLoader"
+          class="ru.tecomgroup.mibbrowser.core.configuration.SnmpConfigLoader"/>
+
+    <bean id="DataBindingService"
+          class="ru.tecomgroup.mibbrowser.spring.service.DataBindingsService" />
+
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <property name="prefix" value="/WEB-INF/pages/"/>
         <property name="suffix" value=".jsp"/>

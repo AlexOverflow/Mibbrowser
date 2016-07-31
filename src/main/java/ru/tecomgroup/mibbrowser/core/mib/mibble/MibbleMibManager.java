@@ -24,10 +24,14 @@ public class MibbleMibManager implements MibManager {
     private  String MIBS_DIRECTORY = getClass().getClassLoader().getResource("mibs").getFile();
 
 
-    public MibbleMibManager() throws IOException {
+    public MibbleMibManager() {
         try {
             mibLoader = new MibbleMibLoader();
-            mibLoader.setMibDirectory(MIBS_DIRECTORY);
+            try {
+                mibLoader.setMibDirectory(MIBS_DIRECTORY);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             mibs = mibLoader.loadMib();
         }catch (NullPointerException e){
             e.printStackTrace();
