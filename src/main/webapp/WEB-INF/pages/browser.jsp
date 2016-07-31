@@ -49,10 +49,12 @@
 			<div class="form-group">
 				<label for="address">ADDRESS</label>
 				<form:input id="address" path="hostAddress" class="form-control" />
+				<form:errors path="hostAddress" cssClass="error" />
 				</div>>
 			<div class="form-group">
 				<label for="oid">OID</label>
 				<form:input id="oid" path="oid" class="form-control" />
+				<form:errors path="oid" cssClass="error" />
 			</div>
 
 			<div class="form-group">
