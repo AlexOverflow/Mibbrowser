@@ -12,9 +12,12 @@
 	<link rel="stylesheet" href="<c:url value="/resources/css/navbar.css"/>" type="text/css" media="all">
 	<link rel="stylesheet" href="<c:url value="/resources/css/normalize.css"/>" type="text/css" media="all">
 
+
 	<script src="<c:url value="/resources/js/jquery.min.js"/>"></script>
 	<script src="<c:url value="/resources/js/bootstrap.min.js"/>"></script>
 	<script src="<c:url value="/resources/js/bootstrap-filestyle.min.js"/>"></script>
+	<script src="<c:url value="/resources/js/validator.js"/>"></script>
+
 
 
 </head>
@@ -22,7 +25,7 @@
 
 <spring:url value="/mibbrowser/browser" var="browserUrl"/>
 <spring:url value="/mibbrowser/mib" var="mibUrl"/>
-<spring:url value="/mibbrowser/config" var="configUrl"/>
+<spring:url value="/mibbrowser/browser/config" var="configUrl"/>
 
 <spring:url value="/mibbrowser/mib/add" var="uploadMib"/>
 <spring:url value="/mibbrowser/mib/delete" var="deleteMib"/>
@@ -33,11 +36,11 @@
 	<nav class="navbar navbar-default">
 		<div class="container-fluid">
 			<div class="navbar-header">
-				<a class="navbar-brand" href="#">MibBrowser</a>
+				<a class="navbar-brand" href="${browserUrl}">MibBrowser</a>
 			</div>
 			<div id="navbar" class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
-					<li  class="active"><a href="${mibUrl}">Browser</a></li>
+					<li  class="active"><a href="${browserUrlUrl}">Browser</a></li>
 					<li><a href="${configUrl}">Configuration</a></li>
 					<li><a href="${mibUrl}">Mib</a></li>
 				</ul>
@@ -46,70 +49,58 @@
 	</nav>
 
 	<div class="jumbotron">
-		<form:form  role="form" method="post" modelAttribute="request" >
+
+		<form:form class="form-horizontal" method="post" modelAttribute="request" data-toggle="validator">
 			<div class="form-group">
-<<<<<<< HEAD
-				<label for="address">ADDRESS</label>
-				<form:input id="address" path="hostAddress" class="form-control" />
-				<form:errors path="hostAddress" cssClass="error" />
-				</div>>
-			<div class="form-group">
-				<label for="oid">OID</label>
-				<form:input id="oid" path="oid" class="form-control" />
-				<form:errors path="oid" cssClass="error" />
-=======
-				HOST ADDRESS:
-				<form:input  path="hostAddress" type="text" class="form-control" />
+				<label for="address" class="col-xs-2 control-label">Address</label>
+				<div class="col-xs-10">
+					<form:input path="hostAddress" pattern="[1-9]+(\.[0-9]+)+" type="text" class="form-control" id="address" placeholder="Host address" />
 				</div>
-			<div class="form-group">
-				OID:
-				<input:input  path="oid" type="text" class="form-control" />
->>>>>>> origin/new_design
 			</div>
-
 			<div class="form-group">
-			<form:select path="command" class="form-control input-lg">
-				<form:option selected="selected" value="SNMP_GET">GET</form:option>
-				<form:option value="SNMP_GET_NEXT">GETNEXT</form:option>
-				<form:option value="SNMP_WALK">WALK</form:option>
-			</form:select>
+				<label for="oid" class="col-xs-2 control-label">OID</label>
+				<div class="col-xs-10">
+					<form:input  path="oid" type="text"  pattern="[1-9]+(\.[0-9]+)+" class="form-control" id="oid" placeholder="OID"   />
+				</div>
+
 			</div>
-
 			<div class="form-group">
-				<input type="submit" class="btn btn-info" value="Send" />
+				<div class="col-xs-offset-2 col-xs-10" style="width: 200px">
+					<form:select path="command" class="form-control">
+						<form:options items="${commandValues}" />
+					</form:select>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-xs-offset-2 col-xs-10">
+					<button type="submit" class="btn btn-primary">Send</button>
+				</div>
 			</div>
 		</form:form>
+
+
 
 		<div class="table-responsive">
 			<table class="table table-striped">
 				<thead>
 				<tr>
-					<th>Время года</th>
-					<th>Дождь</th>
-					<th>Снег</th>
+					<th>OID</th>
+					<th>Mib Name</th>
+					<th>Value</th>
+					<th>Time</th>
 				</tr>
 				</thead>
 				<tbody>
-				<tr>
-					<td>Зима</td>
-					<td>нет</td>
-					<td>есть</td>
-				</tr>
-				<tr>
-					<td>Весна</td>
-					<td>есть</td>
-					<td>есть</td>
-				</tr>
-				<tr>
-					<td>Лето</td>
-					<td>есть</td>
-					<td>нет</td>
-				</tr>
-				<tr>
-					<td>Осень</td>
-					<td>есть</td>
-					<td>есть</td>
-				</tr>
+            <c:if test="${null != response}" >
+				<c:forEach var="mibVar" items="${response.getMibVariables()}">
+					<tr>
+						<td>${mibVar.getOid()}</td>
+						<td>${mibVar.getMibName()}</td>
+						<td>${mibVar.getOidValue()}</td>
+						<td>${response.getTime()}</td>
+					</tr>
+				</c:forEach>
+			</c:if>
 				</tbody>
 			</table>
 		</div>
