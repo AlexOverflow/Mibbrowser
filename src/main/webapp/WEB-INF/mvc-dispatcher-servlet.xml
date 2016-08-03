@@ -33,6 +33,12 @@
         <property name="suffix" value=".jsp"/>
     </bean>
 
+    <bean id="configurationValidator"
+          class="ru.tecomgroup.mibbrowser.spring.Validators.SnmpConfigurationValidator" />
+
+    <bean id="requestValidator"
+          class="ru.tecomgroup.mibbrowser.spring.Validators.MibrowserRequestValidator" />
+
     <mvc:resources mapping="/resources/**" location="/resources/" />
 
     <mvc:annotation-driven />

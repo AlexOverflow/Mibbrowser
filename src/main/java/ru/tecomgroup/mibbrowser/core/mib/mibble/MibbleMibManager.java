@@ -1,13 +1,18 @@
 package ru.tecomgroup.mibbrowser.core.mib.mibble;
 
 
+import jdk.nashorn.internal.ir.Symbol;
 import net.percederberg.mibble.Mib;
+import net.percederberg.mibble.MibValue;
 import net.percederberg.mibble.MibValueSymbol;
+import net.percederberg.mibble.value.ObjectIdentifierValue;
 import org.apache.log4j.Logger;
 import org.springframework.web.multipart.MultipartFile;
 import ru.tecomgroup.mibbrowser.core.mib.MibManager;
 
 import java.io.*;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -82,11 +87,25 @@ public class MibbleMibManager implements MibManager {
 
     @Override
     public String findMibValueByOId(String oid) {
+        List<MibValueSymbol> symbolList= new LinkedList<>();
         for (Mib mib : mibs) {
             MibValueSymbol symbol = mib.getSymbolByOid(oid);
             if (symbol != null) {
-                return symbol.getName();
+                symbolList.add(symbol);
             }
+        }
+
+        Collections.sort(symbolList, new Comparator<MibValueSymbol>() {
+            @Override
+            public int compare(MibValueSymbol o1, MibValueSymbol o2) {
+                ObjectIdentifierValue value1 = (ObjectIdentifierValue) o1.getValue();
+                ObjectIdentifierValue value2 = (ObjectIdentifierValue) o2.getValue();
+                return (value2.toString()).compareTo(value1.toString());
+            }
+        });
+
+        if(!(symbolList.isEmpty())){
+           return symbolList.get(0).getName();
         }
         return null;
     }
