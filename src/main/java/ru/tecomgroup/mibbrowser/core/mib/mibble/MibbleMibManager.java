@@ -1,7 +1,7 @@
 package ru.tecomgroup.mibbrowser.core.mib.mibble;
 
 
-import jdk.nashorn.internal.ir.Symbol;
+
 import net.percederberg.mibble.Mib;
 import net.percederberg.mibble.MibValue;
 import net.percederberg.mibble.MibValueSymbol;
@@ -49,7 +49,7 @@ public class MibbleMibManager implements MibManager {
     }
 
     @Override
-    public void deleteMib(String mibFileName) {
+    public void deleteMibFile(String mibFileName) {
        for(Mib mib : mibs){
            if(mibFileName.equals(mib.getFile().getName()))
                mib.getFile().delete();

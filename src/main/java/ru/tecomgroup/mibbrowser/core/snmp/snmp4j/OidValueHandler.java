@@ -5,15 +5,18 @@ import org.snmp4j.PDU;
 import org.snmp4j.Snmp;
 import org.snmp4j.event.ResponseEvent;
 import org.snmp4j.mp.SnmpConstants;
+import org.snmp4j.smi.GenericAddress;
+import org.snmp4j.smi.OID;
+import org.snmp4j.smi.OctetString;
 import org.snmp4j.smi.VariableBinding;
 import org.snmp4j.transport.DefaultUdpTransportMapping;
 import java.io.IOException;
 
-public class OidValueReader{
+public class OidValueHandler {
 
     private Snmp snmp;
 
-    public OidValueReader(){
+    public OidValueHandler(){
         snmp = snmpUdpProtocolInitialize();
     }
 
@@ -68,6 +71,15 @@ public class OidValueReader{
     public void close(){
         try {
             snmp.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void snmpSet(PDU pdu, CommunityTarget target) {
+        ResponseEvent event = null;
+        try {
+            event = snmp.set(pdu, target);
         } catch (IOException e) {
             e.printStackTrace();
         }

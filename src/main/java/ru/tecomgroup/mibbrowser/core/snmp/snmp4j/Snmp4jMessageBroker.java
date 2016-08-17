@@ -2,7 +2,6 @@ package ru.tecomgroup.mibbrowser.core.snmp.snmp4j;
 
 import org.snmp4j.CommunityTarget;
 import org.snmp4j.PDU;
-import org.snmp4j.smi.Variable;
 import org.snmp4j.smi.VariableBinding;
 import ru.tecomgroup.mibbrowser.core.model.*;
 import ru.tecomgroup.mibbrowser.core.snmp.SnmpMessageBroker;
@@ -18,28 +17,30 @@ public class Snmp4jMessageBroker implements SnmpMessageBroker {
     @Override
     public SnmpResponse sendQuery(MibBrowserRequest request, SnmpConfiguration config){
         SnmpResponse resp = new SnmpResponse();
-        OidValueReader reader = new OidValueReader();
+        OidValueHandler handler = new OidValueHandler();
         PDU pdu = converter.convertToPDU(request, config);
         CommunityTarget target = converter.convertToTarget(request, config);
         VariableBinding variableBinding;
         try {
             switch (request.getCommand()) {
                 case SNMP_GET:
-                    variableBinding = reader.snmpGet(pdu, target);
+                    variableBinding = handler.snmpGet(pdu, target);
                     resp = convertVariableBindingToResponse(variableBinding);
                     break;
                 case SNMP_GET_NEXT:
-                    variableBinding = reader.snmpGetNext(pdu, target);
+                    variableBinding = handler.snmpGetNext(pdu, target);
                     resp = convertVariableBindingToResponse(variableBinding);
                     break;
                 case SNMP_WALK:
                     resp = makeSnmpWalkQuery(pdu, target);
                     break;
+                case SNMP_SET:
+                   handler.snmpSet(pdu, target);
             }
         }catch (NullPointerException e){
             e.printStackTrace();
         }finally {
-            reader.close();
+            handler.close();
         }
 
         return resp;
@@ -60,7 +61,7 @@ public class Snmp4jMessageBroker implements SnmpMessageBroker {
 
 
     private SnmpResponse makeSnmpWalkQuery(PDU pdu, CommunityTarget target) {
-        OidValueReader reader = new OidValueReader();
+        OidValueHandler reader = new OidValueHandler();
         SnmpResponse resp = new SnmpResponse();
         List<SnmpVariable> variableList = new LinkedList<>();
 

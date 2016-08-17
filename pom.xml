@@ -90,6 +90,12 @@
             <version>${log4j.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.mibble</groupId>
+            <artifactId>mibble-parser</artifactId>
+            <version>2.9.3</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -104,11 +110,7 @@
             </plugin>
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <includes>
-                        <include>**/*Tests.java</include>
-                    </includes>
-                </configuration>
+
             </plugin>
         </plugins>
     </build>

@@ -7,7 +7,7 @@ import java.util.List;
 public interface MibManager {
 
     void reLoadMib();
-    void deleteMib(String mibFileName);
+    void deleteMibFile(String mibFileName);
     List<String> getMibList();
     void saveMib(MultipartFile file);
 
