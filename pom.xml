@@ -96,6 +96,23 @@
             <version>2.9.3</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.mibble</groupId>
+            <artifactId>mibble-mibs</artifactId>
+            <version>2.9.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mibble</groupId>
+            <artifactId>grammatica-1.5</artifactId>
+            <version>1.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mibble</groupId>
+            <artifactId>snmp</artifactId>
+            <version>6.0</version>
+        </dependency>
     </dependencies>
 
     <build>
